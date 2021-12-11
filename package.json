@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "lsystems",
   "source": "src/index.html",
-  "main": "src/app.js",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "start": "parcel",

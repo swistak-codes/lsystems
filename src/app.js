@@ -4,6 +4,7 @@ import { data } from "./data";
 const canvas = document.getElementById("canvas");
 const input = document.getElementById("iterations");
 const display = document.getElementById("current");
+const button = document.getElementById("redraw");
 
 const context = canvas.getContext("2d");
 
@@ -14,10 +15,12 @@ const lData = data[dataId];
 
 function draw() {
   const iterations = input.valueAsNumber;
-  context.restore();
+  context.resetTransform();
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.save();
-  context.translate(canvas.width / 4, canvas.height / 4);
+  context.translate(
+    canvas.width / lData.start[0],
+    canvas.height / lData.start[1]
+  );
 
   const l = new LSystem({
     axiom: lData.axiom,
@@ -32,9 +35,15 @@ function draw() {
       F: () => {
         context.beginPath();
         context.moveTo(0, 0);
-        context.lineTo(0, 40 / (l.iterations + 1));
+        context.lineTo(0, 40 / (l.iterations + 2));
         context.stroke();
-        context.translate(0, 40 / (l.iterations + 1));
+        context.translate(0, 40 / (l.iterations + 2));
+      },
+      "[": () => {
+        context.save();
+      },
+      "]": () => {
+        context.restore();
       },
     },
   });
@@ -47,5 +56,7 @@ function draw() {
 
 input.onchange = () => draw();
 input.max = `${lData.maxIterations}`;
+button.onclick = () => draw();
+button.style.display = lData.redraw ? "block" : "none";
 
 draw();
